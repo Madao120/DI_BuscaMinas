@@ -48,14 +48,14 @@ class MineSweeper(QMainWindow):
 
             self.botones.append(fila_botones)
 
-            layout_principal.addWidget(self.informacion)
-            layout_principal.addLayout(self.tablero)
-            layout_principal.addWidget(self.boton_nueva_partida)
+        layout_principal.addWidget(self.informacion)
+        layout_principal.addLayout(self.tablero)
+        layout_principal.addWidget(self.boton_nueva_partida)
 
-            contenedor.setLayout(layout_principal)
-            self.setCentralWidget(contenedor)
+        contenedor.setLayout(layout_principal)
+        self.setCentralWidget(contenedor)
 
-            self.nueva_partida()
+        self.nueva_partida()
 
     def nueva_partida(self):
         self.partida_terminada = False
@@ -79,7 +79,7 @@ class MineSweeper(QMainWindow):
         self.calcular_numeros()
 
         self.informacion.setText(
-            f"Bombas: {self.NUMERO_BOMBAS}"
+            f"Bombas: {self.BOMBAS}"
         )
 
     def colocar_bombas(self):
@@ -89,7 +89,7 @@ class MineSweeper(QMainWindow):
             for columna in range(self.COLUMNAS)
         ]
 
-        bombas = random.sample(posiciones, self.NUMERO_BOMBAS)
+        bombas = random.sample(posiciones, self.BOMBAS)
 
         for fila, columna in bombas:
             self.matriz[fila][columna] = -1
@@ -192,7 +192,7 @@ class MineSweeper(QMainWindow):
 
     def comprobar_victoria(self):
         casillas_sin_bomba = (
-                self.FILAS * self.COLUMNAS - self.NUMERO_BOMBAS
+                self.FILAS * self.COLUMNAS - self.BOMBAS
         )
 
         if self.casillas_reveladas == casillas_sin_bomba:
