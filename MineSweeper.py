@@ -1,6 +1,7 @@
 import random
 import sys
 
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QApplication,
     QGridLayout,
@@ -41,6 +42,14 @@ class MineSweeper(QMainWindow):
 
                 boton.clicked.connect(
                     lambda _, f=fila, c = columna: self.pulsar_boton(f,c)
+                )
+
+                boton.setContextMenuPolicy(
+                    Qt.ContextMenuPolicy.CustomContextMenu
+                )
+
+                boton.customContextMenuRequested.connect(
+                    lambda _, f=fila, c=columna: self.marcar_bandera(f, c)
                 )
 
                 self.tablero.addWidget(boton, fila, columna)
@@ -134,6 +143,10 @@ class MineSweeper(QMainWindow):
         if not boton.isEnabled():
             return
 
+        # No porder clickar si tiene bandera
+        if boton.text() == "🚩":
+            return
+
         if self.matriz[fila][columna] == -1:
             boton.setText("💣")
             self.finalizar_partida(False)
@@ -189,6 +202,20 @@ class MineSweeper(QMainWindow):
                 "Fin de la partida",
                 "Has pulsado una bomba.",
             )
+
+    def marcar_bandera(self, fila, columna):
+        if self.partida_terminada:
+            return
+
+        boton = self.botones[fila][columna]
+
+        if not boton.isEnabled():
+            return
+
+        if boton.text() == "🚩":
+            boton.setText("")
+        else:
+            boton.setText("🚩")
 
     def comprobar_victoria(self):
         casillas_sin_bomba = (
